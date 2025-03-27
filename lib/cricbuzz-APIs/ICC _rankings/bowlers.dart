@@ -2,66 +2,69 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cricket_app/cricbuzz-APIs/Image_service.dart';
+import 'package:cricket_app/cricbuzz-APIs/player_stats/player_stats.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; 
+import 'package:http/http.dart' as http;
 
-class IccCricketRankings extends StatefulWidget {
-  const IccCricketRankings({super.key});
+class ICCBowlers extends StatefulWidget {
+  const ICCBowlers({super.key});
 
   @override
-  State<IccCricketRankings> createState() => _IccCricketRankingsState();
+  State<ICCBowlers> createState() => _ICCBowlersState();
 }
 
-class _IccCricketRankingsState extends State<IccCricketRankings> {
+class _ICCBowlersState extends State<ICCBowlers> {
   List<dynamic> rankingData = [];
   bool isLoading = true;
   String errorMessage = '';
 
-  void initState(){
+  void initState() {
     super.initState();
     get_iic_renkings();
   }
-  Future<void> get_iic_renkings() async {
-      try{
-        final formates = ['test','odi','t20'];
-        for(int i=0; i<3; i++){
-          final url = Uri.parse(
-            'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/batsmen?formatType=${formates[i]}');
-          final response = await http.get(url, headers: {
-            'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-            'x-rapidapi-key':
-                '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8',
-          });
-          if (response.statusCode == 200) {
-            var jsonResponse = json.decode(response.body);
-            rankingData.add(jsonResponse['rank']);
-          } else {
-            errorMessage = 'API call Failed : ${response.statusCode}';
-            
-            break;
-          }
-        }
-        setState(() {
-          isLoading = false;
-        });
-      }catch(e){
-        setState(() {
-          errorMessage = "Error : $e";
-          isLoading = false;
-        });
-      }
-  }
 
+  Future<void> get_iic_renkings() async {
+    try {
+      final formates = ['test', 'odi', 't20'];
+      for (int i = 0; i < 3; i++) {
+        final url = Uri.parse(
+            'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/bowlers?formatType=${formates[i]}');
+        final response = await http.get(url, headers: {
+          'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
+          'x-rapidapi-key':
+              '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8',
+        });
+        if (response.statusCode == 200) {
+          var jsonResponse = json.decode(response.body);
+          rankingData.add(jsonResponse['rank']);
+        } else {
+          errorMessage = 'API call Failed : ${response.statusCode}';
+
+          break;
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = "Error : $e";
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return isLoading
-          ? Center(child: CircularProgressIndicator(),)
-          : errorMessage.isNotEmpty
-              ? Center(
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : errorMessage.isNotEmpty
+            ? Center(
                 child: Text(errorMessage),
               )
-              : PlayerRankingScreen(rankingData: rankingData);
+            : PlayerRankingScreen(rankingData: rankingData);
   }
 }
 
@@ -129,13 +132,12 @@ class RankingList extends StatefulWidget {
 }
 
 class _RankingListState extends State<RankingList> {
-  
   bool isLoadingImage = true;
-  List<Uint8List?> imageBytes =[];
-  
-   void loadImage() async {
-    try{
-      for(int i=0; i<widget.rankings.length; i++){
+  List<Uint8List?> imageBytes = [];
+
+  void loadImage() async {
+    try {
+      for (int i = 0; i < widget.rankings.length; i++) {
         final url = widget.rankings[i]['faceImageId'].toString();
         Uint8List? bytes = await ImageService.fetchImage(url);
         imageBytes.add(bytes);
@@ -143,16 +145,18 @@ class _RankingListState extends State<RankingList> {
       setState(() {
         isLoadingImage = false;
       });
-    }catch(e){
+    } catch (e) {
       setState(() {
         isLoadingImage = false;
       });
     }
   }
+
   void initState() {
     super.initState();
-    loadImage();
+    // loadImage();
   }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -160,25 +164,36 @@ class _RankingListState extends State<RankingList> {
       itemCount: widget.rankings.length,
       itemBuilder: (context, index) {
         final player = widget.rankings[index];
-        return Card(
-          elevation: 3,
-          margin: EdgeInsets.only(bottom: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(25), // Circular shape
-              child: isLoadingImage 
-                    ? CircularProgressIndicator() 
-                    : Image.memory(imageBytes[index]!) ,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PlayerStatsScreen(
+                        playerID: player['id'],
+                        faceImageId: player['faceImageId'])));
+          },
+          child: Card(
+            elevation: 3,
+            margin: EdgeInsets.only(bottom: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            title: Text(player["name"]!,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            subtitle: Text("${player["country"]} - Rating: ${player["rating"]}",
-                style: TextStyle(fontSize: 14)),
-            trailing: Icon(Icons.star, color: Colors.amber), // Rating icon
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(25), // Circular shape
+                child: isLoadingImage
+                    ? Icon(Icons.person)
+                    : Image.memory(imageBytes[index]!),
+              ),
+              title: Text(player["name"]!,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              subtitle: Text(
+                  "${player["country"]} - Rating: ${player["rating"]} - Id: ${player["id"]}",
+                  style: TextStyle(fontSize: 14)),
+              trailing: Icon(Icons.star, color: Colors.amber), // Rating icon
+            ),
           ),
         );
       },

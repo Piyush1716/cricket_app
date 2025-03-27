@@ -18,7 +18,7 @@ class SearchPlayerHomepage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPlayer(player_name: "rohit",)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPlayer(player_name: _playerName.text,)));
             },
             child: Text('Search')
           ),
