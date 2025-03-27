@@ -172,7 +172,7 @@ class _RankingListState extends State<RankingList> {
               borderRadius: BorderRadius.circular(25), // Circular shape
               child: isLoadingImage 
                     ? CircularProgressIndicator() 
-                    : Image.memory(imageBytes[index]!),
+                    : Image.memory(imageBytes[index]!) ,
             ),
             title: Text(player["name"]!,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
