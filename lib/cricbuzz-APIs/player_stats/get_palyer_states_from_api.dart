@@ -1,8 +1,9 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 class GetPalyerStatesFromApi {
-  static const String apiKey = '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8';
-  static const String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
+  static String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
+  static String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
 
   Future<String?> fetchStats(String playerID) async{
     final url = Uri.parse(
@@ -30,8 +31,3 @@ class GetPalyerStatesFromApi {
     }
   }
 }
-
-      // API kes.
-// 9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8
-// 4c28db685amsh0a6bc2cf6d81cd0p12e0fajsn6e3ced662540
-// fae91668c1msh0a972110c87d672p13554cjsn7e2bbc4e70df

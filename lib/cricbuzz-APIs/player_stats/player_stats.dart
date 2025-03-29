@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cricket_app/cricbuzz-APIs/Image_service.dart';
+import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/get_palyer_states_from_api.dart';
 import 'package:flutter/material.dart';
 

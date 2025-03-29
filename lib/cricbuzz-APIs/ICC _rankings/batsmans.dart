@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cricket_app/cricbuzz-APIs/Image_service.dart';
+import 'package:cricket_app/UI%20helper/shimmers.dart';
+import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/player_stats.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart'; 
 
 class ICCBatsmans extends StatefulWidget {
   const ICCBatsmans({super.key});
@@ -31,7 +34,7 @@ class _ICCBatsmansState extends State<ICCBatsmans> {
           final response = await http.get(url, headers: {
             'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
             'x-rapidapi-key':
-                '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8',
+                dotenv.env['API_KEY'] ?? 'default_key',
           });
           if (response.statusCode == 200) {
             var jsonResponse = json.decode(response.body);
@@ -176,8 +179,11 @@ class _RankingListState extends State<RankingList> {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(25), // Circular shape
                 child: isLoadingImage 
-                      ? Icon(Icons.person)
-                      : Image.memory(imageBytes[index]!),
+                      ? FakeProfileImageShimmer()
+                      : Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.memory(imageBytes[index]!, fit: BoxFit.fitHeight,),),
               ),
               title: Text(player["name"]!,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

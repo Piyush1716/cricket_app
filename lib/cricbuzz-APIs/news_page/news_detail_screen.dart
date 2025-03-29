@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:cricket_app/cricbuzz-APIs/Image_service.dart';
+import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:flutter/material.dart';
 
 class NewsDetailScreen extends StatefulWidget {

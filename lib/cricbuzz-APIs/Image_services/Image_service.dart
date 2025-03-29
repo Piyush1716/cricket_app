@@ -1,9 +1,11 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 
 class ImageService {
-  static const String apiKey = '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8';
-  static const String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
+  static String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
+
+  static String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
 
   // Fetch image bytes from API
   static Future<Uint8List?> fetchImage(String imageId) async {

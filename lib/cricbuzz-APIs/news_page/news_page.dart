@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -33,7 +34,7 @@ class _NewsScreenState extends State<NewsScreen> {
       final url = Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/index');
       final response = await http.get(url, headers: {
         'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-        'x-rapidapi-key': '9a2ebd60e4msh1c91eedcc28797fp1a197bjsne5ea8f72b7e8', // Replace with your API key
+        'x-rapidapi-key': dotenv.env['API_KEY'] ?? 'default_key', // Replace with your API key
       });
       if (response.statusCode == 200) {
           final Map<String, dynamic> data = json.decode(response.body);
