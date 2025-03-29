@@ -10,7 +10,7 @@ class ImageService {
   // Fetch image bytes from API
   static Future<Uint8List?> fetchImage(String imageId) async {
     final url = Uri.parse(
-        'https://cricbuzz-cricket.p.rapidapi.com/img/v1/i1/c$imageId/i.jpg');
+        'https://cricbuzz-cricket.p.rapidapi.com/img/v1/i1/c$imageId/i.jpg?p=de');
 
     try {
       final response = await http.get(url, headers: {

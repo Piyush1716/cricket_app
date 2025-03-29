@@ -14,13 +14,17 @@ final ThemeData cricketTheme = ThemeData(
   ),
   textTheme: TextTheme(
     headlineLarge: TextStyle(
-        color: Color.fromARGB(255, 248, 248, 248), fontWeight: FontWeight.bold, fontSize: 22),
+        color: Color.fromARGB(255, 248, 248, 248),
+        fontWeight: FontWeight.bold,
+        fontSize: 22),
     titleLarge: TextStyle(
         color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
     bodyLarge: TextStyle(color: Colors.black87, fontSize: 16),
     bodyMedium: TextStyle(color: Colors.black54, fontSize: 14),
     labelLarge: TextStyle(
-        color: Color.fromARGB(255, 255, 255, 255), fontWeight: FontWeight.bold, fontSize: 14),
+        color: Color.fromARGB(255, 255, 255, 255),
+        fontWeight: FontWeight.bold,
+        fontSize: 14),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -39,5 +43,36 @@ final ThemeData cricketTheme = ThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: Colors.white,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(30),
+      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(30),
+      borderSide: BorderSide(color: Color.fromARGB(255, 243, 2, 2), width: 2.0),
+    ),
+    hintStyle: TextStyle(color: Colors.grey),
+  ),
+  iconTheme: IconThemeData(color: Colors.black87),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Colors.white,
+    selectedItemColor: Color.fromARGB(255, 243, 2, 2),
+    unselectedItemColor: Colors.grey,
+    showUnselectedLabels: true,
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: Color.fromARGB(255, 243, 2, 2).withOpacity(0.2),
+    labelStyle: TextStyle(color: Colors.black87),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+  ),
+  dividerTheme: DividerThemeData(
+    color: Colors.grey.shade300,
+    thickness: 1.0,
   ),
 );
