@@ -20,6 +20,7 @@ class _ICCAllRoundersState extends State<ICCAllRounders> {
   bool isLoading = true;
   String errorMessage = '';
 
+  @override
   void initState() {
     super.initState();
     get_iic_renkings();
@@ -74,7 +75,7 @@ class _ICCAllRoundersState extends State<ICCAllRounders> {
 }
 
 class PlayerRankingScreen extends StatelessWidget {
-  List<dynamic> rankingData = [];
+  final List<dynamic> rankingData;
   PlayerRankingScreen({required this.rankingData});
 
   @override

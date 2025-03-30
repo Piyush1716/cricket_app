@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:cricket_app/UI%20helper/shimmers.dart';
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
+import 'package:cricket_app/cricbuzz-APIs/player_stats/player_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
@@ -146,7 +147,13 @@ class _SearchPlayerState extends State<SearchPlayer> {
   Widget _buildPlayerCard(player, Uint8List? image) {
     return GestureDetector(
       onTap: () {
-        print("Tapped on ${player['name']}");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerStatsScreen(
+                playerID: player['id'].toString(), faceImageId: player['faceImageId'].toString()),
+          ),
+        );
       },
       child: Card(
         elevation: 4,

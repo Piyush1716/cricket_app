@@ -8,9 +8,12 @@ import 'package:flutter/material.dart';
 
 class PlayerStatsScreen extends StatefulWidget {
 
-  String playerID;
-  String faceImageId;
-  PlayerStatsScreen({required this.playerID, required this.faceImageId});
+  final String playerID;
+  final String faceImageId;
+  Uint8List? profileImage;
+  PlayerStatsScreen({required this.playerID, required this.faceImageId, this.profileImage}){
+    print("Player ID: $playerID");
+  }
 
   @override
   _PlayerStatsScreenState createState() => _PlayerStatsScreenState();
@@ -23,18 +26,23 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen>
   Map<String, dynamic> playerStats = {};
   bool isLoading = true;
   bool isLoadingImage = true;
-  Uint8List? profileImage;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     loadStates(widget.playerID);
-    loadImage(widget.faceImageId);
+    if(widget.profileImage != null){
+      print("already there.");
+      isLoadingImage = false;
+    }
+    else {
+      loadImage(widget.faceImageId);
+    }
   }
 
   loadImage(playerID)async{
-    profileImage = await ImageService.fetchImage(playerID);
+    widget.profileImage = await ImageService.fetchImage(playerID);
     setState(() {
       isLoadingImage = false;
     });
@@ -49,7 +57,7 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen>
     GetPalyerStatesFromApi fetchStats = GetPalyerStatesFromApi();
     String? body = await fetchStats.fetchStats(playerID);
     if (body != null) {
-      playerStats = json.decode(body!);
+      playerStats = json.decode(body);
     } else {
       playerStats = {"values": [], "headers": []};
     }
@@ -70,12 +78,12 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen>
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
         )
-      : profileImage != null
+      : widget.profileImage != null
           ? Padding(
               padding: EdgeInsets.all(2.0),
               child: ClipOval(
                 child: Image.memory(
-                  profileImage!,
+                  widget.profileImage!,
                   fit: BoxFit.cover,
                   width: 40,
                   height: 40,
@@ -131,9 +139,10 @@ class StatsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<List<String>> tableData = (data["values"] as List)
-        .map((entry) => (entry["values"] as List).cast<String>())
-        .toList();
+   List<List<String>> tableData = (data["values"] as List)
+    .map((entry) => (entry["values"] as List).map((value) => value.toString()).toList())
+    .toList();
+
 
     int columnIndex = data["headers"].indexOf(matchType);
 

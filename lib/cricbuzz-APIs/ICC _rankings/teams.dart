@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cricket_app/UI%20helper/customcachemanager.dart';
 import 'package:cricket_app/UI%20helper/shimmers.dart';
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -73,7 +75,7 @@ class _ICCTeamsState extends State<ICCTeams> {
 }
 
 class PlayerRankingScreen extends StatelessWidget {
-  List<dynamic> rankingData = [];
+  final List<dynamic> rankingData;
   PlayerRankingScreen({required this.rankingData});
 
   @override
@@ -134,8 +136,22 @@ class _RankingListState extends State<RankingList> {
     try {
       for (int i = 0; i < widget.rankings.length; i++) {
         final url = widget.rankings[i]['imageId'].toString();
-        Uint8List? bytes = await ImageService.fetchImage(url);
-        imageBytes.add(bytes);
+
+        FileInfo? cachedFiles = await CustomCacheManager().getFileFromCache(url);
+        if (cachedFiles != null) {
+          // If the image is cached, read it as bytes
+          Uint8List? bytes = await cachedFiles.file.readAsBytes();
+          imageBytes.add(bytes);
+        }
+        else {
+          // If the image is not cached, fetch it from the API
+          Uint8List? bytes = await ImageService.fetchImage(url);
+          // and cache it for future use
+          if (bytes != null) {
+            await CustomCacheManager().putFile(url, bytes);
+          }
+          imageBytes.add(bytes);
+        }
       }
       setState(() {
         isLoadingImage = false;

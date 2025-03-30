@@ -107,8 +107,8 @@ class _CricketNewsScreenState extends State<CricketNewsScreen> {
 
 class NewsCard extends StatelessWidget {
   final Map<String, dynamic> story;
-  Uint8List? imageBytes;
-  bool isLoadingImage;
+  final Uint8List? imageBytes;
+  final bool isLoadingImage;
   NewsCard({required this.story ,required this.isLoadingImage, required this.imageBytes});
 
   Widget build(BuildContext context) {

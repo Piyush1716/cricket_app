@@ -1,6 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'dart:typed_data';
 class GetPalyerStatesFromApi {
   static String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
   static String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
