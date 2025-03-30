@@ -64,7 +64,7 @@ class _SearchPlayerHomepageState extends State<SearchPlayerHomepage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchPlayer(player_name: playerName),
+          builder: (context) => SearchPlayer(playerName: playerName),
         ),
       );
     }

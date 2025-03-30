@@ -10,8 +10,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class SearchPlayer extends StatefulWidget {
-  final String player_name;
-  const SearchPlayer({super.key, required this.player_name});
+  final String playerName;
+  const SearchPlayer({super.key, required this.playerName});
 
   @override
   State<SearchPlayer> createState() => _SearchPlayerState();
@@ -27,7 +27,7 @@ class _SearchPlayerState extends State<SearchPlayer> {
   @override
   void initState() {
     super.initState();
-    searchPlayer(widget.player_name);
+    searchPlayer(widget.playerName);
   }
 
   Future<void> fetchPlayerImage(List<dynamic>? playersList) async {
@@ -48,9 +48,9 @@ class _SearchPlayerState extends State<SearchPlayer> {
     }
   }
 
-  Future<void> searchPlayer(String player_name) async {
+  Future<void> searchPlayer(String playerName) async {
     final url = Uri.parse(
-        'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/search?plrN=$player_name');
+        'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/search?plrN=$playerName');
 
     try {
       final response = await http.get(
@@ -89,7 +89,7 @@ class _SearchPlayerState extends State<SearchPlayer> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Results for '${widget.player_name}'",
+        title: Text("Results for '${widget.playerName}'",
             style: theme.textTheme.titleLarge),
       ),
       body: _buildPlayersList(),
@@ -151,7 +151,7 @@ class _SearchPlayerState extends State<SearchPlayer> {
           context,
           MaterialPageRoute(
             builder: (context) => PlayerStatsScreen(
-                playerID: player['id'].toString(), faceImageId: player['faceImageId'].toString()),
+                playerID: player['id'].toString(), faceImageId: player['faceImageId'].toString(), ),
           ),
         );
       },

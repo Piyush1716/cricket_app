@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+import 'package:cricket_app/UI%20helper/customcachemanager.dart';
 import 'package:cricket_app/UI%20helper/shimmers.dart';
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/news_page/news_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -29,12 +31,15 @@ class _CricketNewsScreenState extends State<CricketNewsScreen> {
         if (storyList[i]['story']['coverImage'] != null &&
         storyList[i]['story']['coverImage']['id'] != null){
           String imageId = storyList[i]['story']['coverImage']['id'].toString();
-          try{
+          FileInfo? fileInfo = await CustomCacheManager().getFileFromCache(imageId);
+          if(fileInfo != null) {
+            Uint8List? bytes = await fileInfo.file.readAsBytes();
+            imageBytesList.add(bytes);
+          } else {
+            // If the image is not in the cache, fetch it from the network
             Uint8List? bytes = await ImageService.fetchImage(imageId);
             imageBytesList.add(bytes);
-            print("image added successfully: $i");
-          }catch(e){
-            imageBytesList.add(null);
+            await CustomCacheManager().putFile(imageId, bytes!);
           }
         }
       }
