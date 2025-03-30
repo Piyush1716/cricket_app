@@ -5,6 +5,7 @@ import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/get_palyer_states_from_api.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class PlayerStatsScreen extends StatefulWidget {
   final String playerID;
   final String faceImageId;
@@ -20,7 +21,8 @@ class PlayerStatsScreen extends StatefulWidget {
 }
 
 class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
-  Map<String, dynamic> playerStats = {};
+  Map<String, dynamic> playerBatStats = {};
+  Map<String, dynamic> playerBallStats = {};
   bool isLoading = true;
   bool isLoadingImage = true;
 
@@ -45,11 +47,17 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
 
   Future<void> loadStates(String playerID) async {
     GetPalyerStatesFromApi fetchStats = GetPalyerStatesFromApi();
-    String? body = await fetchStats.fetchStats(playerID);
-    if (body != null) {
-      playerStats = json.decode(body);
+    String? body1 = await fetchStats.fetchStats(playerID, "batting");
+    String? body2 = await fetchStats.fetchStats(playerID, "bowling");
+    if (body1 != null) {
+      playerBatStats = json.decode(body1);
     } else {
-      playerStats = {"values": [], "headers": []};
+      playerBatStats = {"values": [], "headers": []};
+    }
+    if (body2 != null) {
+      playerBallStats = json.decode(body2);
+    } else {
+      playerBallStats = {"values": [], "headers": []};
     }
     setState(() {
       isLoading = false;
@@ -83,8 +91,8 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
                 : Icon(Icons.account_circle, size: 40, color: Colors.white),
         title: isLoading
             ? Text('Loading...')
-            : playerStats['appIndex'] != null
-                ? Text(playerStats["appIndex"]['seoTitle']
+            : playerBatStats['appIndex'] != null
+                ? Text(playerBatStats["appIndex"]['seoTitle']
                     .toString()
                     .split('-')
                     .first)
@@ -93,10 +101,25 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: StatsTable(data: playerStats),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Batting Career Summary", style: Theme.of(context).textTheme.titleLarge,),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: StatsTable(data: playerBatStats)
+                    ),
+                    Text("Bowling Career Summary", style: Theme.of(context).textTheme.titleLarge,),
+                    SizedBox(height: 20),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: StatsTable(data: playerBallStats)
+                    ),
+                  ],
+                ),
               ),
             ),
     );

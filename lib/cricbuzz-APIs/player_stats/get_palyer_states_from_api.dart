@@ -4,9 +4,9 @@ class GetPalyerStatesFromApi {
   static String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
   static String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
 
-  Future<String?> fetchStats(String playerID) async{
+  Future<String?> fetchStats(String playerID, type) async{
     final url = Uri.parse(
-      'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/${playerID}/batting'
+      'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/${playerID}/${type}'
     );
     try{
       final respnce = await http.get(
