@@ -15,14 +15,23 @@ class ApiKeyProvider with ChangeNotifier {
 
       await remoteConfig.setConfigSettings(RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 5),
-        minimumFetchInterval: const Duration(minutes: 30),
+        minimumFetchInterval:
+            const Duration(minutes: 10), // Avoid frequent fetches
       ));
 
       await remoteConfig.fetchAndActivate();
 
-      _apiKey = remoteConfig.getString("API_KEY");
-      _isLoaded = true;
-      notifyListeners();
+      String newApiKey = remoteConfig.getString("API_KEY");
+
+      // **Only update and notify if API Key has changed**
+      if (newApiKey.isNotEmpty && newApiKey != _apiKey) {
+        print("API Key updated: $newApiKey");
+        _apiKey = newApiKey;
+        _isLoaded = true;
+        notifyListeners();
+      } else {
+        print("API Key remains unchanged.");
+      }
     } catch (e) {
       print("Error fetching API Key: $e");
     }

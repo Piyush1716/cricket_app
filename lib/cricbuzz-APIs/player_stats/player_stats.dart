@@ -6,6 +6,7 @@ import 'package:cricket_app/cricbuzz-APIs/player_stats/get_palyer_states_from_ap
 import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 // ignore: must_be_immutable
 class PlayerStatsScreen extends StatefulWidget {
@@ -48,14 +49,15 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
       });
       return;
     }
-    widget.profileImage = await ImageService.fetchImage(playerID, apiKey: apiKeyProvider.apiKey);
+    widget.profileImage =
+        await ImageService.fetchImage(playerID, apiKey: apiKeyProvider.apiKey);
     setState(() {
       isLoadingImage = false;
     });
   }
 
   Future<void> loadStates(String playerID) async {
-     final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
     if (!apiKeyProvider.isLoaded) {
       setState(() {
         isLoading = false;
@@ -63,8 +65,10 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
       return;
     }
     GetPalyerStatesFromApi fetchStats = GetPalyerStatesFromApi();
-    String? body1 = await fetchStats.fetchStats(playerID, "batting", apiKeyProvider.apiKey);
-    String? body2 = await fetchStats.fetchStats(playerID, "bowling", apiKeyProvider.apiKey);
+    String? body1 =
+        await fetchStats.fetchStats(playerID, "batting", apiKeyProvider.apiKey);
+    String? body2 =
+        await fetchStats.fetchStats(playerID, "bowling", apiKeyProvider.apiKey);
     if (body1 != null) {
       playerBatStats = json.decode(body1);
     } else {
@@ -84,35 +88,63 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: isLoadingImage
-            ? Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+        elevation: 4,
+        backgroundColor: Colors.deepPurple, // Elegant color
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: isLoading
+            ? Shimmer.fromColors(
+                baseColor: Colors.white.withOpacity(0.5),
+                highlightColor: Colors.white.withOpacity(0.8),
+                child: Container(
+                  height: 20,
+                  width: 100,
+                  color: Colors.white,
                 ),
               )
-            : widget.profileImage != null
-                ? Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ClipOval(
-                      child: Image.memory(
-                        widget.profileImage!,
-                        fit: BoxFit.cover,
-                        width: 40,
-                        height: 40,
-                      ),
+            : Text(
+                playerBatStats["appIndex"]?['seoTitle']
+                        ?.toString()
+                        .split('-')
+                        .first ??
+                    "Player Stats",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: isLoadingImage
+                ? SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : Icon(Icons.account_circle, size: 40, color: Colors.white),
-        title: isLoading
-            ? Text('Loading...')
-            : playerBatStats['appIndex'] != null
-                ? Text(playerBatStats["appIndex"]['seoTitle']
-                    .toString()
-                    .split('-')
-                    .first)
-                : Text('Error'),
+                : widget.profileImage != null
+                    ? ClipOval(
+                        child: Image.memory(
+                          widget.profileImage!,
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.white.withOpacity(0.2),
+                        child:
+                            Icon(Icons.person, size: 28, color: Colors.white),
+                      ),
+          ),
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -123,17 +155,21 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Batting Career Summary", style: Theme.of(context).textTheme.titleLarge,),
+                    Text(
+                      "Batting Career Summary",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: StatsTable(data: playerBatStats)
+                        child: StatsTable(data: playerBatStats)),
+                    Text(
+                      "Bowling Career Summary",
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Text("Bowling Career Summary", style: Theme.of(context).textTheme.titleLarge,),
                     SizedBox(height: 20),
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: StatsTable(data: playerBallStats)
-                    ),
+                        child: StatsTable(data: playerBallStats)),
                   ],
                 ),
               ),
