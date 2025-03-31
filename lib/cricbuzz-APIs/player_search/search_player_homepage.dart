@@ -1,8 +1,9 @@
+import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_search/search_player.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
@@ -25,11 +26,18 @@ class _SearchPlayerHomepageState extends State<SearchPlayerHomepage> {
   }
 
   Future<void> fetchTrendingPlayers() async {
-    final url = Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/trending');
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        trendingPlayers = [];
+      });
+      return;
+    }
     try {
+      final url = Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/trending');
       final response = await http.get(url, headers: {
         'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-        'x-rapidapi-key': dotenv.env['API_KEY'] ?? 'default_key',
+        'x-rapidapi-key': apiKeyProvider.apiKey,
       });
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
@@ -120,13 +128,15 @@ class _SearchPlayerHomepageState extends State<SearchPlayerHomepage> {
                   spacing: 10,
                   children: recentSearches.map((player) => Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Chip(
-                      label: Text(player),
-                      backgroundColor: theme.primaryColor.withOpacity(0.8),
-                      onDeleted: () {
-                        setState(() => recentSearches.remove(player));
-                        saveSearch(player);
-                      },
+                    child: GestureDetector(
+                      onTap: () => searchPlayer(context, player),
+                      child: Chip(
+                        label: Text(player),
+                        backgroundColor: theme.primaryColor.withOpacity(0.8),
+                        onDeleted: () {
+                          setState(() => recentSearches.remove(player));
+                        },
+                      ),
                     ),
                   )).toList(),
                 ),

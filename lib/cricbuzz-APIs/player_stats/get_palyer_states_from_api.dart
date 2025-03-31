@@ -1,10 +1,8 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 class GetPalyerStatesFromApi {
-  static String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
   static String apiHost = 'cricbuzz-cricket.p.rapidapi.com';
 
-  Future<String?> fetchStats(String playerID, type) async{
+  Future<String?> fetchStats(String playerID, type, apiKey) async{
     final url = Uri.parse(
       'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/${playerID}/${type}'
     );

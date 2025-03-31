@@ -7,7 +7,6 @@ import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -92,7 +91,7 @@ class _CricketNewsScreenState extends State<CricketNewsScreen> {
           newsList = jsonResponse['storyList'] ?? [];
           newsList = newsList.where((story) => story['story'] != null).toList(); // Filter out stories with null 'story' because there is some ads.
           isLoading = false;
-          // loadImage(newsList);
+          loadImage(newsList);
         });
       } else {
         setState(() {

@@ -13,7 +13,7 @@ class CustomCacheManager extends CacheManager {
       : super(
           Config(
             key,
-            stalePeriod: Duration(minutes: 5), // Cache expiry set to 30 days
+            stalePeriod: Duration(days: 10), // Cache expiry set to 10 days
             maxNrOfCacheObjects: 100, // Store up to 100 files
           ),
         );

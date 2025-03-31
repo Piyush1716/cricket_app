@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cricket_app/UI%20helper/customcachemanager.dart';
 import 'package:cricket_app/UI%20helper/shimmers.dart';
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/player_stats.dart';
+import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ICCAllRounders extends StatefulWidget {
   const ICCAllRounders({super.key});
@@ -27,6 +30,14 @@ class _ICCAllRoundersState extends State<ICCAllRounders> {
   }
 
   Future<void> get_iic_renkings() async {
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        errorMessage = "Api key is not loaded yet!";
+        isLoading = false;
+      });
+      return;
+    }
     try {
       final formates = ['test', 'odi', 't20'];
       for (int i = 0; i < 3; i++) {
@@ -34,7 +45,7 @@ class _ICCAllRoundersState extends State<ICCAllRounders> {
             'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/allrounders?formatType=${formates[i]}');
         final response = await http.get(url, headers: {
           'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-          'x-rapidapi-key': dotenv.env['API_KEY'] ?? 'default_key',
+          'x-rapidapi-key': apiKeyProvider.apiKey,
         });
         if (response.statusCode == 200) {
           var jsonResponse = json.decode(response.body);
@@ -133,16 +144,36 @@ class _RankingListState extends State<RankingList> {
   List<Uint8List?> imageBytes = [];
 
   void loadImage() async {
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        isLoadingImage = false;
+      });
+      return;
+    }
     try {
       for (int i = 0; i < widget.rankings.length; i++) {
         final url = widget.rankings[i]['faceImageId'].toString();
-        try{
-          Uint8List? bytes = await ImageService.fetchImage(url);
+
+        // Check if the image is already cached
+        // If cached, use the cached image, else fetch it from the api
+        FileInfo? cachedFiles =
+            await CustomCacheManager().getFileFromCache(url);
+        if (cachedFiles != null) {
+          print("image is there in cache");
+          // If the image is cached, read it as bytes
+          Uint8List? bytes = await cachedFiles.file.readAsBytes();
           imageBytes.add(bytes);
-        }
-        catch (e) {
-          imageBytes.add(null); // Add null if image loading fails
-          print("Error loading image for player ${widget.rankings[i]['name']}: $e");
+        } else {
+          print("image is not there in cache");
+          // If the image is not cached, fetch it from the API
+          Uint8List? bytes =
+              await ImageService.fetchImage(url, apiKey: apiKeyProvider.apiKey);
+          // and cache it for future use
+          if (bytes != null) {
+            await CustomCacheManager().putFile(url, bytes);
+          }
+          imageBytes.add(bytes);
         }
       }
       setState(() {

@@ -3,11 +3,12 @@ import 'dart:typed_data';
 import 'package:cricket_app/UI%20helper/shimmers.dart';
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/player_stats.dart';
+import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class SearchPlayer extends StatefulWidget {
   final String playerName;
@@ -31,10 +32,17 @@ class _SearchPlayerState extends State<SearchPlayer> {
   }
 
   Future<void> fetchPlayerImage(List<dynamic>? playersList) async {
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        isLoadingImage = false;
+      });
+      return;
+    }
     try {
       for (int i = 0; i < playersList!.length; i++) {
         String img = playersList[i]['faceImageId'].toString();
-        Uint8List? image = await ImageService.fetchImage(img.toString());
+        Uint8List? image = await ImageService.fetchImage(img.toString(), apiKey: apiKeyProvider.apiKey);
         playerImages.add(image);
       }
       setState(() {
@@ -49,15 +57,20 @@ class _SearchPlayerState extends State<SearchPlayer> {
   }
 
   Future<void> searchPlayer(String playerName) async {
-    final url = Uri.parse(
-        'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/search?plrN=$playerName');
-
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        isLoadingImage = false;
+      });
+      return;
+    }
     try {
+    final url = Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/search?plrN=$playerName');
       final response = await http.get(
         url,
         headers: {
           'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-          'x-rapidapi-key': dotenv.env['API_KEY'] ?? 'default_key',
+          'x-rapidapi-key': apiKeyProvider.apiKey,
         },
       );
 

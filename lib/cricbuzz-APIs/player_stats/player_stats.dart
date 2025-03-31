@@ -3,7 +3,9 @@ import 'dart:typed_data';
 
 import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
 import 'package:cricket_app/cricbuzz-APIs/player_stats/get_palyer_states_from_api.dart';
+import 'package:cricket_app/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class PlayerStatsScreen extends StatefulWidget {
@@ -39,16 +41,30 @@ class _PlayerStatsScreenState extends State<PlayerStatsScreen> {
   }
 
   loadImage(playerID) async {
-    widget.profileImage = await ImageService.fetchImage(playerID);
+    final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        isLoadingImage = false;
+      });
+      return;
+    }
+    widget.profileImage = await ImageService.fetchImage(playerID, apiKey: apiKeyProvider.apiKey);
     setState(() {
       isLoadingImage = false;
     });
   }
 
   Future<void> loadStates(String playerID) async {
+     final apiKeyProvider = Provider.of<ApiKeyProvider>(context, listen: false);
+    if (!apiKeyProvider.isLoaded) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
     GetPalyerStatesFromApi fetchStats = GetPalyerStatesFromApi();
-    String? body1 = await fetchStats.fetchStats(playerID, "batting");
-    String? body2 = await fetchStats.fetchStats(playerID, "bowling");
+    String? body1 = await fetchStats.fetchStats(playerID, "batting", apiKeyProvider.apiKey);
+    String? body2 = await fetchStats.fetchStats(playerID, "bowling", apiKeyProvider.apiKey);
     if (body1 != null) {
       playerBatStats = json.decode(body1);
     } else {
