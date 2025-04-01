@@ -1,6 +1,6 @@
-import 'package:cricket_app/cricbuzz-APIs/ICC%20_rankings/icc_ranking_homepage.dart';
-import 'package:cricket_app/cricbuzz-APIs/news_page/news_home_screen.dart';
-import 'package:cricket_app/cricbuzz-APIs/player_search/search_player_homepage.dart';
+import 'package:cricketX/cricbuzz-APIs/ICC%20_rankings/icc_ranking_homepage.dart';
+import 'package:cricketX/cricbuzz-APIs/news_page/news_home_screen.dart';
+import 'package:cricketX/cricbuzz-APIs/player_search/search_player_homepage.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {

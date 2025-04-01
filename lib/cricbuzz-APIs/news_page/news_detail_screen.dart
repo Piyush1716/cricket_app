@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:cricket_app/UI%20helper/shimmers.dart';
+import 'package:cricketX/UI%20helper/shimmers.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class NewsDetailScreen extends StatelessWidget {

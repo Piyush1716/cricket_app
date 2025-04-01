@@ -1,6 +1,6 @@
-import 'package:cricket_app/provider/api_key_provider.dart';
+import 'package:cricketX/provider/api_key_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cricket_app/cricbuzz-APIs/player_search/search_player.dart';
+import 'package:cricketX/cricbuzz-APIs/player_search/search_player.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';

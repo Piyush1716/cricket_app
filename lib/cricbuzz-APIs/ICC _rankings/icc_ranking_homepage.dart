@@ -1,7 +1,7 @@
-import 'package:cricket_app/cricbuzz-APIs/ICC%20_rankings/allrounders.dart';
-import 'package:cricket_app/cricbuzz-APIs/ICC%20_rankings/batsmans.dart';
-import 'package:cricket_app/cricbuzz-APIs/ICC%20_rankings/bowlers.dart';
-import 'package:cricket_app/cricbuzz-APIs/ICC%20_rankings/teams.dart';
+import 'package:cricketX/cricbuzz-APIs/ICC%20_rankings/allrounders.dart';
+import 'package:cricketX/cricbuzz-APIs/ICC%20_rankings/batsmans.dart';
+import 'package:cricketX/cricbuzz-APIs/ICC%20_rankings/bowlers.dart';
+import 'package:cricketX/cricbuzz-APIs/ICC%20_rankings/teams.dart';
 import 'package:flutter/material.dart';
 
 class IccRankingsScreen extends StatelessWidget {

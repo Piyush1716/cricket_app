@@ -1,7 +1,7 @@
-import 'package:cricket_app/UI%20helper/splash_screen.dart';
-import 'package:cricket_app/UI%20helper/theme.dart';
-import 'package:cricket_app/firebase_options.dart';
-import 'package:cricket_app/provider/api_key_provider.dart';
+import 'package:cricketX/UI%20helper/splash_screen.dart';
+import 'package:cricketX/UI%20helper/theme.dart';
+import 'package:cricketX/firebase_options.dart';
+import 'package:cricketX/provider/api_key_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

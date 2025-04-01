@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:cricket_app/homepage/homepage.dart';
-import 'package:cricket_app/provider/api_key_provider.dart';
+import 'package:cricketX/homepage/homepage.dart';
+import 'package:cricketX/provider/api_key_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

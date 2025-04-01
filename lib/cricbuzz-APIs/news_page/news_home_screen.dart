@@ -1,9 +1,9 @@
 import 'dart:typed_data';
-import 'package:cricket_app/UI%20helper/customcachemanager.dart';
-import 'package:cricket_app/UI%20helper/shimmers.dart';
-import 'package:cricket_app/cricbuzz-APIs/Image_services/Image_service.dart';
-import 'package:cricket_app/cricbuzz-APIs/news_page/news_detail_screen.dart';
-import 'package:cricket_app/provider/api_key_provider.dart';
+import 'package:cricketX/UI%20helper/customcachemanager.dart';
+import 'package:cricketX/UI%20helper/shimmers.dart';
+import 'package:cricketX/cricbuzz-APIs/Image_services/Image_service.dart';
+import 'package:cricketX/cricbuzz-APIs/news_page/news_detail_screen.dart';
+import 'package:cricketX/provider/api_key_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
