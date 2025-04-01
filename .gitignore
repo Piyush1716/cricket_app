@@ -12,26 +12,34 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# IntelliJ / Android Studio related
 *.iml
 *.ipr
 *.iws
 .idea/
+.gradle/
+*.hprof
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# VS Code related
+.vscode/
 
-# Flutter/Dart/Pub related
+# Flutter / Dart / Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-/build/
+.build/
+android/.gradle/
+android/app/*.keystore
+
+# Generated files
+*.lock
+*.g.dart
+*.mocks.dart
 
 # Symbolication related
 app.*.symbols
@@ -39,9 +47,33 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
+# Android build artifacts
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
 
+# iOS build artifacts
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/Generated.xcconfig
+
+# Xcode related
+xcuserdata/
+*.xcworkspace
+*.xcodeproj/
+
+# Environment files
 /assets/.env
+.env
+.env.local
+.env.production
+.env.development
+
+# Firebase related
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
