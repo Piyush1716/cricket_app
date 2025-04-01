@@ -26,29 +26,27 @@ This is a **Flutter-based Cricket App** that provides **real-time cricket player
 ### 🏠 **Home Screen**
 - Provides navigation to **News, Rankings, Search, and Player Stats** sections.
 
-<img src="outputs/home.jpg" width="300" />
+<img src="outputs/home.jpg" width="200" />
 
 ### 🔍 **Player Search Screen**
 - Allows users to search for a player by name and view matching results.
 
-<img src="outputs/search.jpg" width="300" />  
-<img src="outputs/search_results.jpg" width="300" />
+<img src="outputs/search.jpg" width="200" />  <img src="outputs/search_results.jpg" width="200" />
 
 ### 📊 **Player Statistics Screen**
 - Displays detailed **batting, bowling, and career stats** across different formats.
 
-<img src="outputs/player_stats.jpg" width="300" />
+<img src="outputs/player_stats.jpg" width="200" />
 
 ### 📰 **Cricket News Screen**
 - Fetches and displays the **latest cricket news with images and headlines**.
 
-<img src="outputs/news.jpg" width="300" />  
-<img src="outputs/news_details.jpg" width="300" />
+<img src="outputs/news.jpg" width="200" />  <img src="outputs/news_details.jpg" width="200" />
 
 ### 🏆 **ICC Rankings Screen**
 - Displays official **ICC rankings for Batsmen, Bowlers, All-rounders, and Teams**.
 
-<img src="outputs/rankings.jpg" width="300" />
+<img src="outputs/rankings.jpg" width="200" />
 
 ---
 
@@ -56,7 +54,7 @@ This is a **Flutter-based Cricket App** that provides **real-time cricket player
 
 Check out the full **video demo** showcasing the working of all screens:
 
-[![Watch the Video](assets/app_logo.jpg)](outputs/demo.mp4)
+[<img src="assets/app_logo.jpg" width="100" />](outputs/demo.mp4)
 
 ---
 
@@ -106,7 +104,7 @@ Check out the full **video demo** showcasing the working of all screens:
 
 1️⃣ Clone the repository:
    ```sh
-   git clone https://github.com/your-username/cricket-app.git
+   git clone https://github.com/Piyush1716/cricket-app.git
    ```
 2️⃣ Navigate to the project directory:
    ```sh
